@@ -1,0 +1,629 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><meta charset="UTF-8"><script>if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}</script><script>class RocketLazyLoadScripts{constructor(e){this.triggerEvents=e,this.eventOptions={passive:!0},this.userEventListener=this.triggerListener.bind(this),this.delayedScripts={normal:[],async:[],defer:[]},this.allJQueries=[]}_addUserInteractionListener(e){this.triggerEvents.forEach((t=>window.addEventListener(t,e.userEventListener,e.eventOptions)))}_removeUserInteractionListener(e){this.triggerEvents.forEach((t=>window.removeEventListener(t,e.userEventListener,e.eventOptions)))}triggerListener(){this._removeUserInteractionListener(this),"loading"===document.readyState?document.addEventListener("DOMContentLoaded",this._loadEverythingNow.bind(this)):this._loadEverythingNow()}async _loadEverythingNow(){this._delayEventListeners(),this._delayJQueryReady(this),this._handleDocumentWrite(),this._registerAllDelayedScripts(),this._preloadAllScripts(),await this._loadScriptsFromList(this.delayedScripts.normal),await this._loadScriptsFromList(this.delayedScripts.defer),await this._loadScriptsFromList(this.delayedScripts.async),await this._triggerDOMContentLoaded(),await this._triggerWindowLoad(),window.dispatchEvent(new Event("rocket-allScriptsLoaded"))}_registerAllDelayedScripts(){document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((e=>{e.hasAttribute("src")?e.hasAttribute("async")&&!1!==e.async?this.delayedScripts.async.push(e):e.hasAttribute("defer")&&!1!==e.defer||"module"===e.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(e):this.delayedScripts.normal.push(e):this.delayedScripts.normal.push(e)}))}async _transformScript(e){return await this._requestAnimFrame(),new Promise((t=>{const n=document.createElement("script");let r;[...e.attributes].forEach((e=>{let t=e.nodeName;"type"!==t&&("data-rocket-type"===t&&(t="type",r=e.nodeValue),n.setAttribute(t,e.nodeValue))})),e.hasAttribute("src")?(n.addEventListener("load",t),n.addEventListener("error",t)):(n.text=e.text,t()),e.parentNode.replaceChild(n,e)}))}async _loadScriptsFromList(e){const t=e.shift();return t?(await this._transformScript(t),this._loadScriptsFromList(e)):Promise.resolve()}_preloadAllScripts(){var e=document.createDocumentFragment();[...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async].forEach((t=>{const n=t.getAttribute("src");if(n){const t=document.createElement("link");t.href=n,t.rel="preload",t.as="script",e.appendChild(t)}})),document.head.appendChild(e)}_delayEventListeners(){let e={};function t(t,n){!function(t){function n(n){return e[t].eventsToRewrite.indexOf(n)>=0?"rocket-"+n:n}e[t]||(e[t]={originalFunctions:{add:t.addEventListener,remove:t.removeEventListener},eventsToRewrite:[]},t.addEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.add.apply(t,arguments)},t.removeEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.remove.apply(t,arguments)})}(t),e[t].eventsToRewrite.push(n)}function n(e,t){let n=e[t];Object.defineProperty(e,t,{get:()=>n||function(){},set(r){e["rocket"+t]=n=r}})}t(document,"DOMContentLoaded"),t(window,"DOMContentLoaded"),t(window,"load"),t(window,"pageshow"),t(document,"readystatechange"),n(document,"onreadystatechange"),n(window,"onload"),n(window,"onpageshow")}_delayJQueryReady(e){let t=window.jQuery;Object.defineProperty(window,"jQuery",{get:()=>t,set(n){if(n&&n.fn&&!e.allJQueries.includes(n)){n.fn.ready=n.fn.init.prototype.ready=function(t){e.domReadyFired?t.bind(document)(n):document.addEventListener("rocket-DOMContentLoaded",(()=>t.bind(document)(n)))};const t=n.fn.on;n.fn.on=n.fn.init.prototype.on=function(){if(this[0]===window){function e(e){return e.split(" ").map((e=>"load"===e||0===e.indexOf("load.")?"rocket-jquery-load":e)).join(" ")}"string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=e(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{delete Object.assign(arguments[0],{[e(t)]:arguments[0][t]})[t]}))}return t.apply(this,arguments),this},e.allJQueries.push(n)}t=n}})}async _triggerDOMContentLoaded(){this.domReadyFired=!0,await this._requestAnimFrame(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._requestAnimFrame(),window.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._requestAnimFrame(),document.dispatchEvent(new Event("rocket-readystatechange")),await this._requestAnimFrame(),document.rocketonreadystatechange&&document.rocketonreadystatechange()}async _triggerWindowLoad(){await this._requestAnimFrame(),window.dispatchEvent(new Event("rocket-load")),await this._requestAnimFrame(),window.rocketonload&&window.rocketonload(),await this._requestAnimFrame(),this.allJQueries.forEach((e=>e(window).trigger("rocket-jquery-load"))),window.dispatchEvent(new Event("rocket-pageshow")),await this._requestAnimFrame(),window.rocketonpageshow&&window.rocketonpageshow()}_handleDocumentWrite(){const e=new Map;document.write=document.writeln=function(t){const n=document.currentScript,r=document.createRange(),i=n.parentElement;let o=e.get(n);void 0===o&&(o=n.nextSibling,e.set(n,o));const a=document.createDocumentFragment();r.setStart(a,0),a.appendChild(r.createContextualFragment(t)),i.insertBefore(a,o)}}async _requestAnimFrame(){return new Promise((e=>requestAnimationFrame(e)))}static run(){const e=new RocketLazyLoadScripts(["keydown","mousemove","touchmove","touchstart","touchend","wheel"]);e._addUserInteractionListener(e)}}RocketLazyLoadScripts.run();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Aprenda técnicas exclusivas de massagem e torne-se um massagista profissional.">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="shortcut icon" href="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/favicon.png" type="image/x-icon">
+<link rel="icon" href="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/favicon.png" type="image/x-icon">
+<link data-minify="1" rel="stylesheet" type="text/css" href="https://institutoexperience.com.br/wp-content/cache/min/1/wp-content/themes/tantrica-experience/assets/css/css-tantrica-profissional/style.css?ver=1650896902">
+<link data-minify="1" rel="stylesheet" type="text/css" href="https://institutoexperience.com.br/wp-content/cache/min/1/wp-content/themes/tantrica-experience/assets/css/css-cookie-compliance/style.css?ver=1650896829">
+
+ 
+
+
+
+
+<style type="text/css">
+		.headline h2{
+			text-transform: uppercase;
+			font-size: 26px;
+		}
+	</style>
+<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+
+<title>Instituto Experience</title><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&#038;display=swap" /><style id="" media="print" onload="this.media='all'">@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUFjIg1_i6t8kCHKm459Wx7xQYXK0vOoz6jq_p9aX8.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUFjIg1_i6t8kCHKm459Wx7xQYXK0vOoz6jq6R9aX8.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUFjIg1_i6t8kCHKm459Wx7xQYXK0vOoz6jq5Z9aX8.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUFjIg1_i6t8kCHKm459Wx7xQYXK0vOoz6jq3p6aX8.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUFjIg1_i6t8kCHKm459Wx7xQYXK0vOoz6jq0N6aX8.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUFjIg1_i6t8kCHKm459Wx7xQYXK0vOoz6jqyR6aX8.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvr6Ew-.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCs16Ew-.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Ew-.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Ew-.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCu170w-.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuM70w-.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/fonts.gstatic.com/s/montserrat/v23/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvr70w-.ttf) format('truetype');
+}
+</style><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&#038;display=swap" /></noscript>
+<meta name="description" content="Curso Massagem: Domine técnicas de massagem e Aumente sua Renda. Leve a sua carreira para outro nível com aulas online e Certificado. Faça já" />
+<link rel="canonical" href="https://institutoexperience.com.br/tp-fb-page/" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Instituto Experience" />
+<meta property="og:description" content="Curso Massagem: Domine técnicas de massagem e Aumente sua Renda. Leve a sua carreira para outro nível com aulas online e Certificado. Faça já" />
+<meta property="og:url" content="https://institutoexperience.com.br/tp-fb-page/" />
+<meta property="og:site_name" content="Instituto Experience" />
+<meta property="article:modified_time" content="2022-02-01T13:47:54+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://institutoexperience.com.br/#website","url":"https://institutoexperience.com.br/","name":"Instituto Experience","description":"Maior escola online de Massagens do Brasil","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://institutoexperience.com.br/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"pt-BR"},{"@type":"WebPage","@id":"https://institutoexperience.com.br/tp-fb-page/#webpage","url":"https://institutoexperience.com.br/tp-fb-page/","name":"Instituto Experience","isPartOf":{"@id":"https://institutoexperience.com.br/#website"},"datePublished":"2021-06-07T23:30:06+00:00","dateModified":"2022-02-01T13:47:54+00:00","description":"Curso Massagem: Domine técnicas de massagem e Aumente sua Renda. Leve a sua carreira para outro nível com aulas online e Certificado. Faça já","breadcrumb":{"@id":"https://institutoexperience.com.br/tp-fb-page/#breadcrumb"},"inLanguage":"pt-BR","potentialAction":[{"@type":"ReadAction","target":["https://institutoexperience.com.br/tp-fb-page/"]}]},{"@type":"BreadcrumbList","@id":"https://institutoexperience.com.br/tp-fb-page/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://institutoexperience.com.br/"},{"@type":"ListItem","position":2,"name":"TP [PAGE PRINCIPAL] [FACEBOOK]"}]}]}</script>
+
+<link href='https://fonts.gstatic.com' crossorigin rel='preconnect' />
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='https://institutoexperience.com.br/wp-includes/css/dist/block-library/style.min.css?ver=5.9.3' type='text/css' media='all' />
+<style id='global-styles-inline-css' type='text/css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='style-css' href='https://institutoexperience.com.br/wp-content/themes/tantrica-experience/style.css?ver=5.9.3' type='text/css' media='all' />
+<style id='rocket-lazyload-inline-css' type='text/css'>
+.rll-youtube-player{position:relative;padding-bottom:56.23%;height:0;overflow:hidden;max-width:100%;}.rll-youtube-player:focus-within{outline: 2px solid currentColor;outline-offset: 5px;}.rll-youtube-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:100;background:0 0}.rll-youtube-player img{bottom:0;display:block;left:0;margin:auto;max-width:100%;width:100%;position:absolute;right:0;top:0;border:none;height:auto;-webkit-transition:.4s all;-moz-transition:.4s all;transition:.4s all}.rll-youtube-player img:hover{-webkit-filter:brightness(75%)}.rll-youtube-player .play{height:100%;width:100%;left:0;top:0;position:absolute;background:url(https://institutoexperience.com.br/wp-content/plugins/wp-rocket/assets/img/youtube.png) no-repeat center;background-color: transparent !important;cursor:pointer;border:none;}
+</style>
+<script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://institutoexperience.com.br/wp-includes/js/jquery/jquery.min.js?ver=3.6.0' id='jquery-core-js' defer></script>
+<script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://institutoexperience.com.br/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js' defer></script>
+<script type="rocketlazyloadscript" data-minify="1" data-rocket-type='text/javascript' src='https://institutoexperience.com.br/wp-content/cache/min/1/wp-content/plugins/handl-utm-grabber-v3/js/js.cookie.js?ver=1650896815' id='js.cookie-js' defer></script>
+<script type='text/javascript' id='handl-utm-grabber-js-extra'>
+/* <![CDATA[ */
+var handl_utm = {"utm_source":"facebook","utm_medium":"Instagram_Reels","utm_term":"%5BBELEZA%5D+%5B18%2B%5D","utm_content":"AD+612","utm_campaign":"%5BT.P%5D+%5B24%2F04%2F2022%5D+%5BABO%5D+%5BAD+612%5D+%5BTESTE+DUPLICAR+VARIAVES+INTERESSES+2%5D+%5B1-4-1%5D+%5BCAIXETA%5D"};
+var handl_utm_all_params = ["utm_source","utm_medium","utm_term","utm_content","utm_campaign","fbclid","msclkid","gclid","handl_original_ref","handl_landing_page","handl_ip","handl_ref","handl_url","email","username","gaclientid","organic_source","organic_source_str","user_agent"];
+var handl_utm_cookie_duration = ["30","1"];
+var handl_utm_append_params = ["utm_source","utm_medium","utm_term","utm_content","utm_campaign","gclid"];
+var handl_utm_predefined = [];
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-minify="1" data-rocket-type='text/javascript' src='https://institutoexperience.com.br/wp-content/cache/min/1/wp-content/plugins/handl-utm-grabber-v3/js/handl-utm-grabber.js?ver=1650896815' id='handl-utm-grabber-js' defer></script>
+<link rel="https://api.w.org/" href="https://institutoexperience.com.br/wp-json/" /><link rel="alternate" type="application/json" href="https://institutoexperience.com.br/wp-json/wp/v2/pages/2430" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://institutoexperience.com.br/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://institutoexperience.com.br/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 5.9.3" />
+<link rel='shortlink' href='https://institutoexperience.com.br/?p=2430' />
+<link rel="alternate" type="application/json+oembed" href="https://institutoexperience.com.br/wp-json/oembed/1.0/embed?url=https%3A%2F%2Finstitutoexperience.com.br%2Ftp-fb-page%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://institutoexperience.com.br/wp-json/oembed/1.0/embed?url=https%3A%2F%2Finstitutoexperience.com.br%2Ftp-fb-page%2F&#038;format=xml" />
+<link rel="preload" as="font" href="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/webfonts/fa-regular-400.woff2" crossorigin>
+<link rel="preload" as="font" href="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/webfonts/fa-solid-900.woff2" crossorigin><link rel="shortcut icon" type="image/png" href="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/favicon.png" /><noscript><style id="rocket-lazyload-nojs-css">.rll-youtube-player, [data-lazy-src]{display:none !important;}</style></noscript>
+</head>
+<body class="utm-out">
+
+
+
+<header class="header">
+<div class="container">
+
+<div class="row justify-content-between align-items-center">
+<div class="headline col-md-6 col-lg-6">
+<h1>DESCUBRA O MERCADO TOTALMENTE INEXPLORADO DE PROFISSIONAIS QUE ESTÃO <span class="cor-secundaria">FATURANDO DE R$ 200 A R$ 400 POR HORA EM 2021</span></h1>
+<h2>APRENDA TÉCNICAS EXCLUSIVAS DE MASSAGEM TÂNTRICA <span class="cor-secundaria">EM ATÉ 7 DIAS</span>, MESMO QUE VOCÊ SEJA INICIANTE DO ZERO</h2>
+<ul class="check">
+<li>Certificado Profissionalizante 120 horas de carga horária total</li>
+<li>Curso 100% Online Podendo Assistir às Aulas no Computador, Celular ou Tablet</li>
+<li>Curso Rápido, Detalhado e com Modelos Reais</li>
+</ul>
+</div>
+<div class="image-header col-md-6 col-lg-6">
+<picture>
+<source type="image/webp" data-lazy-srcset="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/img-header.webp">
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Massagem" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/img-header.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/img-header.png" alt="Massagem"></noscript>
+</picture>
+</div>
+</div>
+</div>
+</header>
+<main class="content">
+<section class="profissao">
+<div class="container">
+<div class="intro">
+<h3><span class="cor-primaria">VEJA AGORA:</span> Como se Tornar um Profissional em uma das Áreas <span class="cor-primaria">MAIS VALORIZADAS</span> E POUCO EXPLORADAS do Brasil em até 7 dias!</h3>
+<div class="icon-arrow-bottom"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/upsell/marketing/arrow-white.svg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/upsell/marketing/arrow-white.svg"></noscript></div>
+</div>
+<div class="row justify-content-between align-items-center">
+<div class="col-md-6 col-lg-6">
+<div class="img-profissao"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Massagem T Profissional" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/img-te-profissional.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/img-te-profissional.png" alt="Massagem T Profissional"></noscript></div>
+</div>
+<div class="col-md-6 col-lg-6 text-profissao">
+<p>Com os dias difíceis desde 2020, muitas pessoas perderam o prazer de viver, com alto nível de ansiedade e estresse no corpo.</p>
+<p>Isso aumenta a energia que fica acumulada no corpo, bloqueando as emoções, alegria e felicidade.</p>
+<p>Por isso, homens e mulheres estão <strong>pagando de R$ 200 a R$ 400 por hora</strong> em um tipo específico de massagem...</p>
+<p>Essa massagem ajuda a liberar ansiedades e tensões que dificultam as informações responsáveis pelo prazer, pelo relaxamento e pelo equilíbrio geral do corpo.</p>
+<p>Só que esse é um mercado de massagem completamente <strong>INEXPLORADO</strong>, com poucos profissionais formados para atender a alta demanda de pessoas procurando por esses alívios no corpo…</p>
+<h3><strong>ABRINDO UMA OPORTUNIDADE ÚNICA PARA VOCÊ SAIR NA FRENTE NESSE MERCADO.</strong></h3>
+<p>Foi por esse motivo que o Instituto Experience, a escola de massagens online que mais cresce no Brasil, criou a...</p>
+</div>
+</div>
+</div>
+</section>
+<section class="cursos">
+<div class="container">
+<div class="headline-curso">
+<h2>PROFISSIONALIZAÇÃO EM MASSAGEM TÂNTRICA</h2>
+<p>Nós estamos revelando todos os segredos para te dar autoridade e o caminho para você se tornar um massagista profissional nessa técnica, mesmo que você nunca tenha feito massagem.</p>
+<p>E com esse conhecimento, você vai descobrir como criar uma experiência para fazer o cliente voltar a fazer a massagem várias vezes com você.</p>
+<h3>Com essa formação, <span class="cor-secundaria"><strong>você poderá ganhar R$ 12 mil por mês</strong></span> (mais detalhes abaixo).</h3>
+<p>Nós vamos te mostrar como fazer esse tipo de massagem em um ambiente respeitoso e conduzido de forma ética e profissional.</p>
+<p>Por isso, aqui está o que você vai aprender em cada módulo:</p>
+</div>
+<div class="curso">
+<div class="row justify-content-between align-items-center">
+<div class="col-md-5 col-lg-5">
+<div class="img-curso"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Fisio Experience" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/modulo1.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/modulo1.png" alt="Fisio Experience"></noscript></div>
+</div>
+<div class="col-md-7 col-lg-7">
+<h4>Módulo 1</h4>
+<h3>Tudo Sobre Essa Massagem</h3>
+<p>Aqui você vai aprender a fundo o que é essa massagem, o benefício do toque em todo o corpo e quais as principais escolas de aprendizado.</p>
+<p>Esse conhecimento vai fazer você entender melhor cada tipo de cliente e como proporcionar a melhor experiência para que ele possa voltar a fazer a massagem com você.</p>
+</div>
+</div>
+</div>
+<div class="curso">
+<div class="row justify-content-between align-items-center">
+<div class="col-md-5 col-lg-5">
+<div class="img-curso"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Fisio Experience" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/modulo2.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/modulo2.png" alt="Fisio Experience"></noscript></div>
+</div>
+<div class="col-md-7 col-lg-7">
+<h4>Módulo 2</h4>
+<h3>Os Diferentes Tipos de Massagem e Materiais Utilizados</h3>
+<p>Nesse módulo você vai aprender os benefícios dos diferentes tipos de massagem, tanto para homens quanto para mulheres.</p>
+<p>Você ainda vai aprender tudo sobre a biomassagem, massagem sensorial e massagem vibracional para ajudar a </p>
+<p>E também vamos te mostrar os melhores materiais a serem utilizados e possíveis variações para melhor bem estar e felicidade dos seus clientes.</p>
+</div>
+</div>
+</div>
+<div class="curso">
+<div class="row justify-content-between align-items-center">
+<div class="col-md-5 col-lg-5">
+<div class="img-curso"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Fisio Experience" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/modulo3.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/modulo3.png" alt="Fisio Experience"></noscript></div>
+</div>
+<div class="col-md-7 col-lg-7">
+<h4>Módulo 3</h4>
+<h3>Como Atender o Cliente de Forma Ética e Profissional</h3>
+<p>E nesse módulo você vai descobrir o que essa massagem não é, além de como tratar a higiene e biossegurança do cliente e como recebê-lo para uma sessão de forma ética e profissional.</p>
+<p>Esse profissionalismo que você vai aprender nessas aulas vão te diferenciar nesse mercado para verem que você será um profissional sério.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="certificado-reconhecido">
+<div class="container">
+<div class="row justify-content-between align-items-center">
+<div class="col-md-6 col-lg-6">
+<h2>Certificados reconhecidos em todo o território nacional</h2>
+<p>Além de você ser formado pela escola de massagens online que mais cresce no Brasil...</p>
+<p>Você ainda receberá esse <strong>certificado profissionalizante de 120 horas ao final do curso.</strong></p>
+<p>Além disso, ele é reconhecido pela ABRATH, a maior entidade de terapias holísticas do Brasil.</p>
+<p>Com esse certificado pendurado na sua parede, você:</p>
+</div>
+<div class="col-md-6 col-lg-6">
+<picture>
+
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Sobre o Massage Experience" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado-reconhecido.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado-reconhecido.png" alt="Sobre o Massage Experience"></noscript>
+</picture>
+</div>
+</div>
+<div class="box-beneficio-certificado">
+<div class="row justify-content-between align-items-center">
+<div class="col-md-6 col-lg-6">
+<div class="row justify-content-between align-items-center">
+<div class="col-md-4 col-lg-4">
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/principal/icon-professores.svg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/principal/icon-professores.svg"></noscript>
+</div>
+<div class="col-md-8 col-lg-8">
+<ul class="check">
+<li>Terá o reconhecimento de todos os seus clientes</li>
+<li>Terá mais autoridade e será vista como uma profissional capacitada</li>
+<li>Poderá abrir o seu próprio espaço de massagens (caso não tenha)</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-6">
+<div class="row justify-content-between align-items-center">
+<div class="col-md-4 col-lg-4">
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/principal/icon-formando.svg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/principal/icon-formando.svg"></noscript>
+</div>
+<div class="col-md-8 col-lg-8">
+<ul class="check">
+<li>Poderá atender na casa dos seus clientes, ou na sua própria casa</li>
+<li>E ainda poderá prestar serviço a outras clínicas</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="oportunidades">
+<div class="container">
+<h2>PEGUE GRATUITAMENTE SEU CERTIFICADO PROFISSIONALIZANTE</h2>
+<p>Após concluir o curso, você receberá um <span class="destaque">certificado inédito em seu nome</span> para mostrar a todos sua especialização!</p>
+<p>Você Poderá Trabalhar Imediatamente Após Emitir Seu Certificado <strong>Cobrando Entre R$ 200 e R$ 400 por Sessão.</strong></p>
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado.png"></noscript>
+ 
+</div>
+</section>
+
+<section class="certificado">
+<div class="container">
+<h2>Eles têm certificado, e você?</h2>
+<div class="row">
+<div class="col-md-4 col-lg-4">
+<div class="certificado-wrap">
+<div class="imagem-depoimento">
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Certificado" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado01.jpg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado01.jpg" alt="Certificado"></noscript>
+</div>
+</div>
+</div>
+<div class="col-md-4 col-lg-4">
+<div class="certificado-wrap">
+<div class="imagem-depoimento">
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Certificado" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado02.jpg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado02.jpg" alt="Certificado"></noscript>
+</div>
+</div>
+</div>
+<div class="col-md-4 col-lg-4">
+<div class="certificado-wrap">
+<div class="imagem-depoimento">
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Certificado" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado03.jpg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado03.jpg" alt="Certificado"></noscript>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="content-750">
+<div class="container">
+<h2>ÓTIMA NOTÍCIA: Você Não Vai Precisar Pagar Caro Igual a Esses Outros Cursos</h2>
+<p>Nós resolvemos separar essa parte para você ver quanto que os nossos concorrentes estão cobrando nos seus cursos...</p>
+<p>Para você se inscrever hoje na nossa Profissionalização na escola de massagens online que mais cresce no Brasil...</p>
+<h3>Você <strong>NÃO</strong> vai precisar pagar os <strong>R$ 1.690</strong> desse curso abaixo:</h3>
+<div class="img-content"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/print-curso1.jpg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/print-curso1.jpg"></noscript></div>
+<p>Nem muito menos <strong>R$ 1.530</strong> desse outro curso que entrega menos do que a nossa Formação...</p>
+<div class="img-content"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/print-curso2.jpg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/print-curso2.jpg"></noscript></div>
+<p>Ou então desse outro curso de <strong>R$ 760...</strong></p>
+<div class="img-content"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/print-curso3.jpg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/print-curso3.jpg"></noscript></div>
+</div>
+</section>
+<section class="bonus">
+<div class="container">
+<h2>COMPRANDO HOJE, VOCÊ AINDA LEVA
++4 BÔNUS INCRÍVEIS!</h2>
+<div class="row">
+<div class="modulo col-md-6 col-lg-6">
+<div class="text-bonus">Bônus #1</div>
+<div class="modulo-wrap">
+<div class="img-bonus"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/bonus1.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/bonus1.png"></noscript></div>
+<h3>Exercícios Respiratórios para preparar seu cliente para as sessões</h3>
+<span class="stars"></span>
+<span class="preco-bonus">R$ 97,00</span>
+<span class="zero">R$ 0,00</span>
+</div>
+</div>
+<div class="modulo col-md-6 col-lg-6">
+<div class="text-bonus">Bônus #2</div>
+<div class="modulo-wrap">
+<div class="img-bonus"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/bonus2.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/bonus2.png"></noscript></div>
+<h3>Exercícios Dinâmicos para o cliente aproveitar melhor a experiência</h3>
+<span class="stars"></span>
+<span class="preco-bonus">R$ 47,00</span>
+<span class="zero">R$ 0,00</span>
+</div>
+</div>
+<div class="modulo col-md-6 col-lg-6">
+<div class="text-bonus">Bônus #3</div>
+<div class="modulo-wrap">
+<div class="img-bonus"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/bonus3.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/bonus3.png"></noscript></div>
+<h3>Formas de Atrair Novos Clientes</h3>
+<span class="stars"></span>
+<span class="preco-bonus">R$ 29,90</span>
+<span class="zero">R$ 0,00</span>
+</div>
+</div>
+<div class="modulo col-md-6 col-lg-6">
+<div class="text-bonus">Bônus #4</div>
+<div class="modulo-wrap">
+<div class="img-bonus"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/massage/bonus/ficha-anamnese.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/massage/bonus/ficha-anamnese.png"></noscript></div>
+<h3>Elaboração de uma Anamnese adequada</h3>
+<span class="stars"></span>
+<span class="preco-bonus">R$ 79,90</span>
+<span class="zero">R$ 0,00</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="content-750">
+<div class="container">
+<h2>COM APENAS 2 CLIENTES POR DIA, VOCÊ PODE FATURAR R$ 12 MIL POR MÊS</h2>
+<p>E conforme sua agenda for enchendo, você poderá aumentar seu preço para novos clientes, proporcionando mais conforto financeiro pra você e pra sua família.</p>
+<p>Como um exemplo passar a <strong>cobrar R$ 300 por hora</strong> e podendo passar de R$ 400 por hora.</p>
+<p>Cobrar esse preço para trabalhar por uma hora estaria bom pra você?</p>
+<p>Mas você não precisará investir nem mesmo R$ 400 para ter acesso à Nossa Profissionalização hoje.</p>
+</div>
+</section>
+
+<section id="oferta" class="oferta">
+<div class="container">
+<div class="box-oferta">
+<h3>Se matriculando hoje você vai receber...</h3>
+<ul class="check">
+<li>+19 videoaulas práticas e objetivas mostrando o passo a passo de cada técnica com modelos reais.</li>
+<li>Módulo 1: Tudo Sobre Essa Massagem</li>
+<li>Módulo 2: Os Diferentes Tipos de Massagem e Materiais Utilizados</li>
+ <li>Módulo 3: Como Atender o Cliente de Forma Ética e Profissional </li>
+<li>Acesso VITALÍCIO a TODOS os Cursos</li>
+<li>Atualizações 100% Gratuitas</li>
+<li><strong>Certificado Profissionalizante de 120 horas de carga horária total.</strong></li>
+</ul>
+<div class="certificado-oferta">
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Certificado TE" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/te-profissional/certificado.png" alt="Certificado TE"></noscript>
+</div>
+<p class="copy-oferta">Oferta especial de<br><span class="preco-normal">R$ 297,00</span></p>
+<div class="price">
+<p>por apenas 9x de:</p>
+<span class="valor"><span class="cifrao">R$ </span>8<span class="cifrao">,60</span></span>
+<p>Ou <strong>R$ 67,00 à vista</strong> à vista</p>
+<p>Menos de 0,64 centavos por dia</p>
+</div>
+<a href="https://app.monetizze.com.br/r/BUK1274489?split=9" class="btn cta animated infinite pulse utm" title="Comprar agora">SIM! QUERO ME TORNAR UM PROFISSIONAL DE MASSAGEM TÂNTRICA AGORA</a>
+<div class="selos"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/selos-oferta.svg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/selos-oferta.svg"></noscript></div>
+</div>
+<div class="garantia">
+<div class="container">
+<div class="icon-garantia"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/fisioterapia/icon-garantia.png"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/fisioterapia/icon-garantia.png"></noscript></div>
+<h2>Garantia Incondicional de 7 Dias</h2>
+<p>Se você comprar o curso, mas por <strong>qualquer motivo que seja</strong> não gostar, basta pedir reembolso no prazo de 7 dias, que nós <strong>devolveremos 100% do seu dinheiro.</strong></p>
+</div>
+</div>
+<div class="perguntas-frequentes">
+<div class="container">
+<h2>Dúvidas Frequentes</h2>
+<div class="perguntas">
+<div class="accordion-wrapper">
+<button class="accordion">1. O que é o Instituto Experience?</button>
+<div class="details">
+<p>O Instituto Experience é a maior escola de estética e terapias holísticas do Brasil, com mais de 40 mil alunos.</p>
+</div>
+</div>
+<div class="accordion-wrapper">
+<button class="accordion">2. O curso tem certificado? </button>
+<div class="details">
+<p>Sim. O curso tem certificado inéditos para você constatar sua especialização.</p>
+</div>
+</div>
+<div class="accordion-wrapper">
+<button class="accordion">3. Como acessar o curso?</button>
+<div class="details">
+<p>Se você fizer sua inscrição por PIX ou Cartão de Crédito, você receberá os dados de acesso imediatamente através do seu e-mail.</p>
+<p>Se você fizer sua inscrição por boleto, terá que aguardar 3 dias úteis, para poder acessar.</p>
+</div>
+</div>
+<div class="accordion-wrapper">
+<button class="accordion">4. Tem reembolso?</button>
+<div class="details">
+<p>Sim. Se você comprar o curso, mas achar que não valeu a pena o investimento, basta mandar mensagem para o nosso suporte e solicitar seu reembolso no período de 7 dias após a compra.</p>
+</div>
+</div>
+<div class="accordion-wrapper">
+<button class="accordion">5. É confiável?</button>
+<div class="details">
+<p>Totalmente confiável. O pagamento é processado pela maior plataforma de pagamentos online do Brasil.</p>
+</div>
+</div>
+<div class="accordion-wrapper">
+<button class="accordion">6. É reconhecido pelo MEC?</button>
+<div class="details">
+<p>O MEC monitora e chancela apenas os cursos de Graduação e Pós-graduação.</p>
+<p>Os nossos Cursos se enquadram na categoria de Cursos Livres, com base legal sustentada pelo Decreto Presidencial nº 5.154, de 23 de Julho de 2004, art. 1º E 3º e Portaria nº 008 de 25/06/2002, Publicada no Diário Oficial/SC - nº 16.935 - 27/06/2002.</p>
+</div>
+</div>
+<div class="accordion-wrapper">
+<button class="accordion">7. Até quando posso acessar o curso?</button>
+<div class="details">
+<p>O acesso é vitalício. Uma vez que você comprar, terá acesso ao curso pra sempre.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="btn-center"><a href="https://app.monetizze.com.br/r/BUK1274489?split=9" class="btn animated infinite pulse utm" title="Comprar agora">SIM! QUERO ME TORNAR UM PROFISSIONAL DE MASSAGEM TÂNTRICA AGORA</a></div>
+</div>
+</section>
+</main>
+<footer class="footer">
+<div class="container">
+<div class="logo-footer"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" data-lazy-src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/logo-instituto.svg"><noscript><img src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/images/logo-instituto.svg"></noscript></div>
+<p>Instituto Experience - Todos os Direitos Reservados ©</p>
+<ul>
+<li><a href="https://institutoexperience.com.br/politicas-de-privacidade">Políticas de Privacidade</a></li>
+<li><a href="https://institutoexperience.com.br/contato">Contato</a></li>
+</ul>
+<p class="disclaimer">
+<strong>Esse site não é afiliado ao Facebook</strong> ou qualquer entidade do Facebook. Depois que você sair do Facebook, a responsabilidade não é deles e sim do nosso site. Fazemos todos os esforços para indicar claramente e mostrar todos as provas reais do produto e usamos resultados reais. Nós não vendemos seus e-mail ou qualquer informação para terceiros. Jamais fazemos nenhum tipo de spam. Se você tiver alguma dúvida, sinta-se à vontade para usar o link de contato e falar conosco em horário comercial de Segunda a Sextas das 09h00 às 18h00. Lemos e respondemos todas as mensagens por ordem de chegada.
+</p>
+</div>
+</footer>
+
+<div class="cookie-compliance">
+<div class="cookie-compliance__container">
+<div class="cookie-wrap">
+
+<div class="cookie-compliance__copy"><span>Este site usa cookies para garantir que você obtenha a melhor experiência em nosso site. Ao usar nosso site você concorda com estas condições de acordo com a nossa <a href="https://institutoexperience.com.br/politicas-de-privacidade/">Políticas de Privacidade</a>.</span></div>
+<form class="cookie-compliance__form">
+<div class="cookie-compliance__form-item">
+<button class="cookie-compliance__submit" type="submit">Aceito</button>
+</div>
+</form>
+<div class="cookie-compliance__close">Close </div>
+</div>
+</div>
+</div>
+
+
+<script type="rocketlazyloadscript" src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/js/jquery-3.5.1.slim.min.js" defer></script>
+<script type="rocketlazyloadscript" src="https://institutoexperience.com.br/wp-content/themes/tantrica-experience/assets/js/bootstrap.min.js" defer></script>
+<script type="rocketlazyloadscript" data-minify="1" src="https://institutoexperience.com.br/wp-content/cache/min/1/wp-content/themes/tantrica-experience/assets/js/script-cookie.js?ver=1650896815" defer></script>
+<script type="rocketlazyloadscript" data-rocket-type="text/javascript">
+
+function myFunc(x)
+{
+ x.parentNode.style.display="none";
+}	
+</script>
+<script type="rocketlazyloadscript">
+  setTimeout(function(){
+
+	var accordion = document.getElementsByClassName("accordion");
+
+	for (let i = 0; i < accordion.length; i++) {
+		accordion[i].addEventListener("click", function(){
+			this.classList.toggle("active");
+			var details = this.nextElementSibling;
+			if (details.style.maxHeight) {
+				details.style.maxHeight = null;
+			} else {
+				details.style.maxHeight = details.scrollHeight + "px";
+			}
+		});
+	}
+
+  },1000);  
+  </script>
+<script type="rocketlazyloadscript">
+	if (typeof MsCrmMkt !== 'undefined'){
+	    MsCrmMkt.MsCrmFormLoader.on("afterFormLoad", function(event) {
+			jQuery(event.formPlaceholder).find('input').each(function(id, field){
+			    var thiss = jQuery(field)			
+			    
+			    
+			    if ( typeof(thiss.attr('title')) != 'undefined' ){
+			        if (thiss.attr('title') != ''){
+			            //console.log('1',field,thiss.attr('title'))
+			            var param = thiss.attr('title').toLowerCase().replace(/\s+/g,'_')
+					    if (param != ''){
+					        thiss.val(Cookies.get(param))
+					    }
+			        }else{
+			            //console.log('2',field,thiss.attr('title'))
+			        }
+				}else{
+			        //console.log('3',field,thiss.attr('title'))
+				}
+			})
+	//		handl_utm_all_params.forEach(function(param) {
+	//		    jQuery('input[title='+param+']').val(Cookies.get(param));
+	//		})
+		})
+	}
+	
+	</script><script type="rocketlazyloadscript" data-rocket-type='text/javascript' id='rocket-browser-checker-js-after'>
+"use strict";var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||!1,descriptor.configurable=!0,"value"in descriptor&&(descriptor.writable=!0),Object.defineProperty(target,descriptor.key,descriptor)}}return function(Constructor,protoProps,staticProps){return protoProps&&defineProperties(Constructor.prototype,protoProps),staticProps&&defineProperties(Constructor,staticProps),Constructor}}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor))throw new TypeError("Cannot call a class as a function")}var RocketBrowserCompatibilityChecker=function(){function RocketBrowserCompatibilityChecker(options){_classCallCheck(this,RocketBrowserCompatibilityChecker),this.passiveSupported=!1,this._checkPassiveOption(this),this.options=!!this.passiveSupported&&options}return _createClass(RocketBrowserCompatibilityChecker,[{key:"_checkPassiveOption",value:function(self){try{var options={get passive(){return!(self.passiveSupported=!0)}};window.addEventListener("test",null,options),window.removeEventListener("test",null,options)}catch(err){self.passiveSupported=!1}}},{key:"initRequestIdleCallback",value:function(){!1 in window&&(window.requestIdleCallback=function(cb){var start=Date.now();return setTimeout(function(){cb({didTimeout:!1,timeRemaining:function(){return Math.max(0,50-(Date.now()-start))}})},1)}),!1 in window&&(window.cancelIdleCallback=function(id){return clearTimeout(id)})}},{key:"isDataSaverModeOn",value:function(){return"connection"in navigator&&!0===navigator.connection.saveData}},{key:"supportsLinkPrefetch",value:function(){var elem=document.createElement("link");return elem.relList&&elem.relList.supports&&elem.relList.supports("prefetch")&&window.IntersectionObserver&&"isIntersecting"in IntersectionObserverEntry.prototype}},{key:"isSlowConnection",value:function(){return"connection"in navigator&&"effectiveType"in navigator.connection&&("2g"===navigator.connection.effectiveType||"slow-2g"===navigator.connection.effectiveType)}}]),RocketBrowserCompatibilityChecker}();
+</script>
+<script type='text/javascript' id='rocket-preload-links-js-extra'>
+/* <![CDATA[ */
+var RocketPreloadLinksConfig = {"excludeUris":"\/(?:.+\/)?feed(?:\/(?:.+\/?)?)?$|\/(?:.+\/)?embed\/|\/(index\\.php\/)?wp\\-json(\/.*|$)|\/instpanel15947\/|\/wp-admin\/|\/logout\/|\/instpanel15947\/|\/refer\/|\/go\/|\/recommend\/|\/recommends\/","usesTrailingSlash":"1","imageExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif","fileExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif|php|pdf|html|htm","siteUrl":"https:\/\/institutoexperience.com.br","onHoverDelay":"100","rateThrottle":"3"};
+/* ]]> */
+</script>
+<script type="rocketlazyloadscript" data-rocket-type='text/javascript' id='rocket-preload-links-js-after'>
+(function() {
+"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},e=function(){function i(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}}();function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var t=function(){function n(e,t){i(this,n),this.browser=e,this.config=t,this.options=this.browser.options,this.prefetched=new Set,this.eventTime=null,this.threshold=1111,this.numOnHover=0}return e(n,[{key:"init",value:function(){!this.browser.supportsLinkPrefetch()||this.browser.isDataSaverModeOn()||this.browser.isSlowConnection()||(this.regex={excludeUris:RegExp(this.config.excludeUris,"i"),images:RegExp(".("+this.config.imageExt+")$","i"),fileExt:RegExp(".("+this.config.fileExt+")$","i")},this._initListeners(this))}},{key:"_initListeners",value:function(e){-1<this.config.onHoverDelay&&document.addEventListener("mouseover",e.listener.bind(e),e.listenerOptions),document.addEventListener("mousedown",e.listener.bind(e),e.listenerOptions),document.addEventListener("touchstart",e.listener.bind(e),e.listenerOptions)}},{key:"listener",value:function(e){var t=e.target.closest("a"),n=this._prepareUrl(t);if(null!==n)switch(e.type){case"mousedown":case"touchstart":this._addPrefetchLink(n);break;case"mouseover":this._earlyPrefetch(t,n,"mouseout")}}},{key:"_earlyPrefetch",value:function(t,e,n){var i=this,r=setTimeout(function(){if(r=null,0===i.numOnHover)setTimeout(function(){return i.numOnHover=0},1e3);else if(i.numOnHover>i.config.rateThrottle)return;i.numOnHover++,i._addPrefetchLink(e)},this.config.onHoverDelay);t.addEventListener(n,function e(){t.removeEventListener(n,e,{passive:!0}),null!==r&&(clearTimeout(r),r=null)},{passive:!0})}},{key:"_addPrefetchLink",value:function(i){return this.prefetched.add(i.href),new Promise(function(e,t){var n=document.createElement("link");n.rel="prefetch",n.href=i.href,n.onload=e,n.onerror=t,document.head.appendChild(n)}).catch(function(){})}},{key:"_prepareUrl",value:function(e){if(null===e||"object"!==(void 0===e?"undefined":r(e))||!1 in e||-1===["http:","https:"].indexOf(e.protocol))return null;var t=e.href.substring(0,this.config.siteUrl.length),n=this._getPathname(e.href,t),i={original:e.href,protocol:e.protocol,origin:t,pathname:n,href:t+n};return this._isLinkOk(i)?i:null}},{key:"_getPathname",value:function(e,t){var n=t?e.substring(this.config.siteUrl.length):e;return n.startsWith("/")||(n="/"+n),this._shouldAddTrailingSlash(n)?n+"/":n}},{key:"_shouldAddTrailingSlash",value:function(e){return this.config.usesTrailingSlash&&!e.endsWith("/")&&!this.regex.fileExt.test(e)}},{key:"_isLinkOk",value:function(e){return null!==e&&"object"===(void 0===e?"undefined":r(e))&&(!this.prefetched.has(e.href)&&e.origin===this.config.siteUrl&&-1===e.href.indexOf("?")&&-1===e.href.indexOf("#")&&!this.regex.excludeUris.test(e.href)&&!this.regex.images.test(e.href))}}],[{key:"run",value:function(){"undefined"!=typeof RocketPreloadLinksConfig&&new n(new RocketBrowserCompatibilityChecker({capture:!0,passive:!0}),RocketPreloadLinksConfig).init()}}]),n}();t.run();
+}());
+</script>
+<script>window.lazyLoadOptions={elements_selector:"img[data-lazy-src],.rocket-lazyload,iframe[data-lazy-src]",data_src:"lazy-src",data_srcset:"lazy-srcset",data_sizes:"lazy-sizes",class_loading:"lazyloading",class_loaded:"lazyloaded",threshold:300,callback_loaded:function(element){if(element.tagName==="IFRAME"&&element.dataset.rocketLazyload=="fitvidscompatible"){if(element.classList.contains("lazyloaded")){if(typeof window.jQuery!="undefined"){if(jQuery.fn.fitVids){jQuery(element).parent().fitVids()}}}}}};window.addEventListener('LazyLoad::Initialized',function(e){var lazyLoadInstance=e.detail.instance;if(window.MutationObserver){var observer=new MutationObserver(function(mutations){var image_count=0;var iframe_count=0;var rocketlazy_count=0;mutations.forEach(function(mutation){for(var i=0;i<mutation.addedNodes.length;i++){if(typeof mutation.addedNodes[i].getElementsByTagName!=='function'){continue}
+if(typeof mutation.addedNodes[i].getElementsByClassName!=='function'){continue}
+images=mutation.addedNodes[i].getElementsByTagName('img');is_image=mutation.addedNodes[i].tagName=="IMG";iframes=mutation.addedNodes[i].getElementsByTagName('iframe');is_iframe=mutation.addedNodes[i].tagName=="IFRAME";rocket_lazy=mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');image_count+=images.length;iframe_count+=iframes.length;rocketlazy_count+=rocket_lazy.length;if(is_image){image_count+=1}
+if(is_iframe){iframe_count+=1}}});if(image_count>0||iframe_count>0||rocketlazy_count>0){lazyLoadInstance.update()}});var b=document.getElementsByTagName("body")[0];var config={childList:!0,subtree:!0};observer.observe(b,config)}},!1)</script><script data-no-minify="1" async src="https://institutoexperience.com.br/wp-content/plugins/wp-rocket/assets/js/lazyload/17.5/lazyload.min.js"></script><script>function lazyLoadThumb(e){var t='<img data-lazy-src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360"><noscript><img src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360"></noscript>',a='<button class="play" aria-label="play Youtube video"></button>';return t.replace("ID",e)+a}function lazyLoadYoutubeIframe(){var e=document.createElement("iframe"),t="ID?autoplay=1";t+=0===this.parentNode.dataset.query.length?'':'&'+this.parentNode.dataset.query;e.setAttribute("src",t.replace("ID",this.parentNode.dataset.src)),e.setAttribute("frameborder","0"),e.setAttribute("allowfullscreen","1"),e.setAttribute("allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"),this.parentNode.parentNode.replaceChild(e,this.parentNode)}document.addEventListener("DOMContentLoaded",function(){var e,t,p,a=document.getElementsByClassName("rll-youtube-player");for(t=0;t<a.length;t++)e=document.createElement("div"),e.setAttribute("data-id",a[t].dataset.id),e.setAttribute("data-query", a[t].dataset.query),e.setAttribute("data-src", a[t].dataset.src),e.innerHTML=lazyLoadThumb(a[t].dataset.id),a[t].appendChild(e),p=e.querySelector('.play'),p.onclick=lazyLoadYoutubeIframe});</script></body>
+</html>
